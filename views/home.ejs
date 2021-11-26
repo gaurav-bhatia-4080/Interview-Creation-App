@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interview Creation App</title>
+    
+    <link href="https://fonts.googleapis.com/css?family=Alegreya&display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+    <script defer src="https://friconix.com/cdn/friconix.js"> </script>
+    <script src="https://kit.fontawesome.com/5258c2a186.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css"> 
+    <link rel="stylesheet" href="/css/styles.css">
+    
+</head>
+<body>
+    <!-- Container of the APP -->
+
+    <div class="container" id='style-1'>
+        <div class="heading">
+            <i class="fas fa-clipboard-list"></i>
+            <h1>Interview Creation Portal</h1>
+        </div>
+        <!-- Form for inputting data -->
+        <div class="form-container">
+            <form action="/create-list" method="POST">                
+                <div class="bor-bot flex">
+                    <!-- Datepicker -->
+                    <div class="desc">
+                            <label for="date"><p>Date</p></label>
+                            <input class="unstyled" type="date" name="startDate" required="required" id="datepicker" min="2021-07-24">
+                    </div>             
+                </div>
+                <div class="bor-bot flex">
+                    <!-- Datepicker -->
+                    
+                    <div class="due-date">
+                        <label for="appt"><p>Start Time:</p></label>
+                        <input type="time" id="appt" name="startTime">
+                    </div>
+                    <div class="due-date">
+                        <label for="appt"><p>End Time:</p></label>
+                        <input type="time" id="appt" name="endTime">
+                    </div>
+                   
+                </div>
+                <!-- Description Form -->
+                <div class="bor-bot">                
+                    <div>
+                        <label for="description"><p>Description</p></label>
+                    </div>
+                    <div class="desc">
+                        <input type="text" placeholder="What is this interview about?" name="description" required="required" id="description">
+                    </div>
+                </div>
+                <div class="bor-bot flex">                
+                    <div class="due-date">
+                        <label for="name_interviewer"><p>Name of the Interviewer</p></label>
+                        <input type="text" placeholder="John Doe" name="name_interviewer" required="required" id="description">
+                    </div>
+                    <div class="due-date">
+                        <label for="email"><p>Email of the Interviewer</p></label>
+                        <input type="email" placeholder="john_doe@email.com" id="email" name="mailid_interviewer">
+                    </div>
+                </div>
+                <div class="bor-bot flex">                
+                    <div class="due-date">
+                        <label for="name_student"><p>Name of the Participant</p></label>
+                        <input type="text" placeholder="John Doe" name="name_student" required="required" id="description">
+                    </div>
+                    <div class="due-date">
+                        <label for="email"><p>Email of the Participant</p></label>
+                        <input type="email" placeholder="john_doe@email.com" id="email" name="mailid_student">
+                    </div>
+                </div>
+
+                <!-- Submitting the Form -->
+                <div class="bor-bot add-but">
+                    <button type="submit" id="add-task"><i class="fas fa-plus"></i> Create Interview </button>
+                </div>
+            </form>
+
+            <!-- Display and Deletion of a Task -->
+            <div class="list">
+                <form name = "Form1" method = "POST">
+                    <!-- Deletion -->
+                    <div class="del-but">
+                        <button type="submit" onclick = "OnButton1()" id="add-task" ><i class="fas fa-trash-alt"></i> Cancel Interview </button>
+                    </div>
+                    <!-- Display -->
+                    <% for(let i of list){ %>
+                        <div class="item hvr-grow ">
+                            <input type="checkbox" value="<%= i._id %>" name="check<%= i._id %>" class="check">
+                            <span>
+                                <h3 id="strike"><%= i.name_interviewer %> x <%= i.name_student %></h3>
+                                <p id="strike2"><i class="far fa-calendar-alt"></i> <%= i.startDate.toDateString() %>, <%= i.startTime %>-<%= i.endTime %></p>
+                                <div type="submit" class="edit_button" onclick="openForm('<%= i._id %>')"><i class="fas fa-edit"></i></div>
+                            </span>
+                        </div>
+                    <% } %>
+                    <div class="edit-container">
+                        <div class="form-popup" id="myForm">                
+                            <div class="bor-bot flex">
+                                <!-- Datepicker -->
+                                <div class="desc">
+                                        <label for="date"><p>Date</p></label>
+                                        <input class="unstyled" type="date" name="startDate_c" required="required" id="datepicker2" min="2021-07-24">                          
+                                </div> 
+                            </div>
+                            <div class="bor-bot flex">
+                                <!-- Datepicker -->
+                                
+                                <div class="due-date">
+                                    <label for="appt"><p>Start Time:</p></label>
+                                    <input type="time" class = "marg-r" id="appt" name="startTime_c">
+                                </div>
+                                <div class="due-date">
+                                    <label for="appt"><p>End Time:</p></label>
+                                    <input type="time" class = "marg-r" id="appt" name="endTime_c">
+                                </div>
+                            
+                            </div>
+                            <!-- Description Form -->
+                            <div class="bor-bot">                
+                                <div>
+                                    <label for="description"><p>Description</p></label>
+                                </div>
+                                <div class="desc">
+                                    <input type="text" placeholder="What is this interview about?" name="description_c" required="required" id="description">
+                                </div>
+                            </div>                
+
+                            <input type = "hidden" id = "editss" name = "edit_id">
+            
+                            <!-- Submitting the Form -->
+                            <div class="bor-bot add-but">
+                                <button type="submit" class="btn marg-ten" onclick = "onEdits()" >Edit Task</button>
+                                <button type="submit" class="btn cancel marg-ten" onclick="closeForm()">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>        
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/index.js"></script>
+    <script>
+        var current_id;
+
+
+        function openForm(id) {
+            current_id = id;
+            document.getElementById("myForm").style.display = "block";
+        }
+
+        function onEdits()
+        {
+            document.getElementById("editss").value = current_id;
+            OnButton2();
+        }
+        
+        function closeForm() {
+            current_id = null;
+            document.getElementById("myForm").style.display = "none";
+        }
+        
+        <% if (flash.success.length > 0) { %>
+               new Noty({
+                   theme: 'metroui',
+                   text: "<%= flash.success %>",
+                   type: 'success',
+                   layout: 'topRight',
+                   timemout: 1500,
+               }).show();    
+        <% } %>
+
+        <% if (flash.error.length > 0) { %>
+               new Noty({
+                   theme: 'metroui',
+                   text: "<%= flash.error %>",
+                   type: 'error',
+                   layout: 'topRight',
+                   timemout: 1500,
+               }).show();    
+        <% } %>
+
+        <% if (flash.alert.length > 0) { %>
+               new Noty({
+                   theme: 'metroui',
+                   text: "<%= flash.error %>",
+                   type: 'alert',
+                   layout: 'topRight',
+                   timemout: 1500,
+               }).show();    
+        <% } %>
+    </script>
+
+</body>
+</html>
